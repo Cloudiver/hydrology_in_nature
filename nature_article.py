@@ -146,9 +146,10 @@ def main():
         with open('last_article.txt', 'a', encoding='utf-8') as f:
             for paper in papers[::-1]:
                 f.write(paper[0] + ',')   # 写入最新文章标题
-                f.write(paper[1] + ',')   # 写入最新文章链接
-                f.write(paper[2] + ',')   # 写入最新文章日期
+                f.write(paper[2] + ',')   # 写入最新文章链接
+                f.write(paper[3] + ',')   # 写入最新文章日期
                 f.write(paper[4] + '\n')   # 写入最新文章摘要
+                f.write(paper[5] + '\n')   # 写入期刊
     return papers
 
 
