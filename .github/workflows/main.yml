@@ -1,0 +1,35 @@
+name: "crawl water data"
+
+on:
+  schedule:
+    - cron: '30 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  start:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: [3.9.13]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
+    - name: run python script
+      timeout-minutes: 5
+      run: |
+        python3 rss_feed.py
+    - name: upload data
+      run: |
+        git config --global user.name ${{github.actor}}
+        git config --global user.email ${{secrets.EMAIL}}
+        git add .
+        git commit -m "Github Action auto upload $(date)"
+        git push https://${{github.actor}}:${{secrets.LERY}}@github.com/${{github.repository}}.git HEAD:${{ github.ref }} || echo "No changes to commit"

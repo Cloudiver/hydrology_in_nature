@@ -1,0 +1,5 @@
+requests==2.31.0
+beautifulsoup4==4.12.3
+feedgen==1.0.0
+pygtrans==1.6.1
+pytz
