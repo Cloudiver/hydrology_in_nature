@@ -70,7 +70,7 @@ def get_article_titles(base_url, need_journal, last_first_article=None):
                 break
 
             if journal in need_journal:
-                # 获取摘要
+                # 获取摘要, 作者信息
                 description, author_names = get_description(href, headers)
 
                 print(f"{full_text}")
@@ -83,7 +83,7 @@ def get_article_titles(base_url, need_journal, last_first_article=None):
                 # 只需要特定期刊
                 papers.append([full_text, author_names, href, article_date, description, journal, img_src])
             
-            if papers and len(papers) == 3:
+            if papers and len(papers) == 10:
                 return papers, papers[0][1]
             
         return papers, papers[0][1] if papers else None
@@ -119,16 +119,22 @@ def get_last_line_third_element(filename):
 
 
 def main():
-    url = 'https://www.nature.com/search?article_type=research%2C+reviews&subject=hydrology&order=date_desc&page=1'
-    need_journal = ['Nature', 'Nature Climate Change', 'Nature Communications', 'Nature Geoscience', 
-                    'Communications Earth & Environment', 'Nature Reviews Earth & Environment', 
-                    'Nature Sustainability', 'Nature Water', 
-                    'npj Climate and Atmospheric Science', 'Scientific Data']
-    
-    last_first_article = get_last_line_third_element('last_article.txt')
-    print(last_first_article)
+    with open('subjects.txt') as f:
+        subjects = [subject.strip() for subject in f.readlines()]         
+        if len(subjects) > 1:
+            subjects = ',%20'.join(subjects)
+        else:
+            print('subjects不能为空')
+            return
+        url = f'https://www.nature.com/search?article_type=research%2C+reviews&subject={subjects}&order=date_desc&page=1'
+
+    with open('journal list.txt') as f:
+        journals = [journal.strip() for journal in f.readlines()]   
         
-    papers, current_first_article = get_article_titles(url, need_journal, last_first_article)
+    last_first_article = get_last_line_third_element('last_article.txt')
+    # print(last_first_article)
+        
+    papers, current_first_article = get_article_titles(url, journals, last_first_article)
 
     if not papers:
         # print("今天没有新文章")
