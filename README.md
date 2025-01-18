@@ -14,8 +14,6 @@
 
 ![](./pic/demo.png)
 
-
-
 ### 修改
 
 - 修改项目中subjects.txt可更换为其他研究领域，或者是增加新的subject，subject至少有一项。subject列表可在nature官网上查看：https://www.nature.com/subjects 。注意：填入的subject必须和列表中的完全一致，否则可能筛选不到文章。
