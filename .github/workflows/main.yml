@@ -1,4 +1,4 @@
-name: "crawl water data"
+name: "Hydrology in Nature journals"
 
 on:
   schedule:
