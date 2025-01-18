@@ -122,7 +122,7 @@ def main():
     with open('subjects.txt') as f:
         subjects = [subject.strip() for subject in f.readlines()]
         if len(subjects) == 1:
-            url = f'https://www.nature.com/search?article_type=research%2C+reviews&subject={subjects}&order=date_desc&page=1'
+            url = f'https://www.nature.com/search?article_type=research%2C+reviews&subject={subjects[0]}&order=date_desc&page=1'
         elif len(subjects) > 1:
             subjects = ',%20'.join(subjects)
             url = f'https://www.nature.com/search?article_type=research%2C+reviews&subject={subjects}&order=date_desc&page=1'
