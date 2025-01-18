@@ -120,13 +120,15 @@ def get_last_line_third_element(filename):
 
 def main():
     with open('subjects.txt') as f:
-        subjects = [subject.strip() for subject in f.readlines()]         
-        if len(subjects) > 1:
+        subjects = [subject.strip() for subject in f.readlines()]
+        if len(subjects) == 1:
+            url = f'https://www.nature.com/search?article_type=research%2C+reviews&subject={subjects}&order=date_desc&page=1'
+        elif len(subjects) > 1:
             subjects = ',%20'.join(subjects)
+            url = f'https://www.nature.com/search?article_type=research%2C+reviews&subject={subjects}&order=date_desc&page=1'
         else:
             print('subjects不能为空')
             return
-        url = f'https://www.nature.com/search?article_type=research%2C+reviews&subject={subjects}&order=date_desc&page=1'
 
     with open('journal list.txt') as f:
         journals = [journal.strip() for journal in f.readlines()]   
