@@ -1,6 +1,6 @@
 ### 简介
 
-本项目提供发表在_Nature_系列期刊上、水文学_Hydrology_领域文章的RSS订阅。
+本项目提供发表在*Nature*系列期刊上、水文学*Hydrology*领域文章的RSS订阅。
 
 ### 特点
 
