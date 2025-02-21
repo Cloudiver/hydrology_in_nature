@@ -1,8 +1,9 @@
 import re
+import os
 import requests
 from bs4 import BeautifulSoup
 
-import re
+# os.chdir('D:/py/hydrology_in_nature')
 
 def remove_html_tags_except_sub_sup(text):
     # 正则表达式：匹配除了 <sub> 和 <sup> 之外的所有 HTML 标签
@@ -38,7 +39,7 @@ def get_description(url, headers):
         description = 'This article has no abstract.'
         return description, "; ".join(author_names)
     else:
-        description = remove_html_tags_except_sub_sup(description[0])
+        description = remove_html_tags_except_sub_sup(str(description[0]))
         return description, "; ".join(author_names)
 
 
