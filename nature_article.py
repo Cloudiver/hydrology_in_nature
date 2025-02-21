@@ -119,7 +119,7 @@ def get_last_line_third_element(filename):
 
 
 def main():
-    with open('subjects.txt') as f:
+    with open('D:/py/hydrology_in_nature/last_article.txt', encoding='utf-8') as f:
         subjects = [subject.strip() for subject in f.readlines()]
         if len(subjects) == 1:
             url = f'https://www.nature.com/search?article_type=research%2C+reviews&subject={subjects[0]}&order=date_desc&page=1'
@@ -130,10 +130,10 @@ def main():
             print('subjects不能为空')
             return
 
-    with open('journal list.txt') as f:
+    with open('D:/py/hydrology_in_nature/journal list.txt') as f:
         journals = [journal.strip() for journal in f.readlines()]   
         
-    last_first_article = get_last_line_third_element('last_article.txt')
+    last_first_article = get_last_line_third_element('D:/py/hydrology_in_nature/last_article.txt')
     # print(last_first_article)
         
     papers, current_first_article = get_article_titles(url, journals, last_first_article)
@@ -143,7 +143,7 @@ def main():
         return
 
     if current_first_article:
-        with open('last_article.txt', 'a', encoding='utf-8') as f:
+        with open('D:/py/hydrology_in_nature/last_article.txt', 'a', encoding='utf-8') as f:
             for paper in papers[::-1]:
                 f.write(paper[0] + ',')   # 写入最新文章标题
                 f.write(paper[2] + ',')   # 写入最新文章链接
