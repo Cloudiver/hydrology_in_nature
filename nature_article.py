@@ -1,5 +1,13 @@
+import re
 import requests
 from bs4 import BeautifulSoup
+
+import re
+
+def remove_html_tags_except_sub_sup(text):
+    # 正则表达式：匹配除了 <sub> 和 <sup> 之外的所有 HTML 标签
+    clean_text = re.sub(r'<(?!\/?(sub|sup)\b)[^>]+>', '', text)
+    return clean_text
 
 
 def convert_to_full_image(url):
@@ -24,7 +32,14 @@ def get_description(url, headers):
     authors = soup.select('ul[data-test="authors-list"] li a[data-test="author-name"]')
     author_names = [author.get_text() for author in authors]
 
-    return str(description[0]).lstrip('<p>').rstrip('</p>'), "; ".join(author_names)
+    # bug: 部分情况下可能无摘要, 如: https://doi.org/10.1038/s41586-024-08358-0
+    # 已解决
+    if len(description) == 0:
+        description = 'This article has no abstract.'
+        return description, "; ".join(author_names)
+    else:
+        description = remove_html_tags_except_sub_sup(description[0])
+        return description, "; ".join(author_names)
 
 
 def get_affiliation(url, headers):
@@ -45,7 +60,8 @@ def get_article_titles(base_url, need_journal, last_first_article=None):
     try:
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-            "Referer": base_url
+            "Referer": base_url,
+            "Content-Type": "text/html; charset=UTF-8"
         }
         
         response = requests.get(base_url, headers=headers)
@@ -119,7 +135,7 @@ def get_last_line_third_element(filename):
 
 
 def main():
-    with open('D:/py/hydrology_in_nature/last_article.txt', encoding='utf-8') as f:
+    with open('subjects.txt', encoding='utf-8') as f:
         subjects = [subject.strip() for subject in f.readlines()]
         if len(subjects) == 1:
             url = f'https://www.nature.com/search?article_type=research%2C+reviews&subject={subjects[0]}&order=date_desc&page=1'
@@ -130,10 +146,10 @@ def main():
             print('subjects不能为空')
             return
 
-    with open('D:/py/hydrology_in_nature/journal list.txt') as f:
+    with open('journal list.txt') as f:
         journals = [journal.strip() for journal in f.readlines()]   
         
-    last_first_article = get_last_line_third_element('D:/py/hydrology_in_nature/last_article.txt')
+    last_first_article = get_last_line_third_element('last_article.txt')
     # print(last_first_article)
         
     papers, current_first_article = get_article_titles(url, journals, last_first_article)
@@ -143,7 +159,7 @@ def main():
         return
 
     if current_first_article:
-        with open('D:/py/hydrology_in_nature/last_article.txt', 'a', encoding='utf-8') as f:
+        with open('last_article.txt', 'a', encoding='utf-8') as f:
             for paper in papers[::-1]:
                 f.write(paper[0] + ',')   # 写入最新文章标题
                 f.write(paper[2] + ',')   # 写入最新文章链接

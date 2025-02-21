@@ -16,7 +16,7 @@ def create_rss_feed(articles):
         fe = fg.add_entry()
         fe.title(article[-2] + " | " + title_trans[index].translatedText)
         fe.link(href=article[2])
-        fe.description("<b>作者:</b> " + article[1] + '<br/><br/><b>摘要（谷歌翻译）</b><br/>' + abstract_trans[index].translatedText + '<br/><br/><b>英文摘要</b><br/>' + article[4] + '<br/><br/><img src="' + article[6] + '" />')
+        fe.description('<b>标题: </b>' + article[0] + '<br/><br/><b>作者:</b> ' + article[1] + '<br/><br/><b>摘要（谷歌翻译）</b><br/>' + abstract_trans[index].translatedText + '<br/><br/><b>英文摘要</b><br/>' + article[4] + '<br/><br/><img src="' + article[6] + '" />')
         # fe.image(article[6])
         pub_date = datetime.strptime(article[3], '%Y-%m-%d')
         pub_date = pytz.timezone('UTC').localize(pub_date)
